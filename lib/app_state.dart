@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
-import 'models/order.dart';
+import 'order.dart';
 import 'api.dart';
 import 'notify.dart';
 import 'strings.dart';
