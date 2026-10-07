@@ -26,6 +26,12 @@ jobs:
         run: |
           flutter create . --platforms=android --org com.example
 
+      - name: Configure Gradle Desugaring
+        run: |
+          sed -i 's/compileSdk = .*/compileSdk = 34/' android/app/build.gradle
+          sed -i '/compileOptions {/a \        coreLibraryDesugaringEnabled true' android/app/build.gradle
+          sed -i '/dependencies {/a \    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:2.0.4"' android/app/build.gradle
+
       - name: Get dependencies
         run: flutter pub get
 
