@@ -31,22 +31,24 @@ jobs:
           python3 -c "
           import os
 
-          # البحث عن ملف build.gradle الخاص بالتطبيق
-          path_gradle = 'android/app/build.gradle'
-          path_kts = 'android/app/build.gradle.kts'
-
-          target_file = path_gradle if os.path.exists(path_gradle) else path_kts
+          target_file = 'android/app/build.gradle.kts' if os.path.exists('android/app/build.gradle.kts') else 'android/app/build.gradle'
 
           if os.path.exists(target_file):
               with open(target_file, 'r') as f:
                   content = f.read()
 
-              # تفعيل coreLibraryDesugaring
-              if 'compileOptions' in content and 'coreLibraryDesugaringEnabled' not in content:
-                  content = content.replace('compileOptions {', 'compileOptions {\n        isCoreLibraryDesugaringEnabled = true\n        coreLibraryDesugaringEnabled true')
-
-              if 'dependencies {' in content and 'desugar_jdk_libs' not in content:
-                  content = content.replace('dependencies {', 'dependencies {\n    coreLibraryDesugaring(\"com.android.tools:desugar_jdk_libs:2.0.4\")\n    implementation(\"com.android.tools:desugar_jdk_libs:2.0.4\")')
+              if 'build.gradle.kts' in target_file:
+                  # تنسيق Kotlin DSL
+                  if 'compileOptions {' in content and 'isCoreLibraryDesugaringEnabled' not in content:
+                      content = content.replace('compileOptions {', 'compileOptions {\n        isCoreLibraryDesugaringEnabled = true')
+                  if 'dependencies {' in content and 'desugar_jdk_libs' not in content:
+                      content = content.replace('dependencies {', 'dependencies {\n    coreLibraryDesugaring(\"com.android.tools:desugar_jdk_libs:2.0.4\")')
+              else:
+                  # تنسيق Groovy
+                  if 'compileOptions {' in content and 'coreLibraryDesugaringEnabled' not in content:
+                      content = content.replace('compileOptions {', 'compileOptions {\n        coreLibraryDesugaringEnabled true')
+                  if 'dependencies {' in content and 'desugar_jdk_libs' not in content:
+                      content = content.replace('dependencies {', 'dependencies {\n    coreLibraryDesugaring \"com.android.tools:desugar_jdk_libs:2.0.4\"')
 
               with open(target_file, 'w') as f:
                   f.write(content)
