@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'models/order.dart';
+import 'order.dart';
 
 class Api {
   static String base = '';
