@@ -1,6 +1,9 @@
 # هذا الملف يبني ملف APK تلقائياً عند رفع المشروع على GitHub — بدون حاسوب
 name: Build APK
-on: [push]
+on:
+  push:
+  workflow_dispatch:
+
 jobs:
   build:
     runs-on: ubuntu-latest
