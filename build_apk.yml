@@ -1,0 +1,17 @@
+# هذا الملف يبني ملف APK تلقائياً عند رفع المشروع على GitHub — بدون حاسوب
+name: Build APK
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - run: flutter pub get
+      - run: flutter build apk --release
+      - uses: actions/upload-artifact@v4
+        with:
+          name: admin-app-apk
+          path: build/app/outputs/flutter-apk/app-release.apk
