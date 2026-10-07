@@ -28,9 +28,29 @@ jobs:
 
       - name: Configure Gradle Desugaring
         run: |
-          sed -i 's/compileSdk = .*/compileSdk = 34/' android/app/build.gradle
-          sed -i '/compileOptions {/a \        coreLibraryDesugaringEnabled true' android/app/build.gradle
-          sed -i '/dependencies {/a \    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:2.0.4"' android/app/build.gradle
+          python3 -c "
+          import os
+
+          # البحث عن ملف build.gradle الخاص بالتطبيق
+          path_gradle = 'android/app/build.gradle'
+          path_kts = 'android/app/build.gradle.kts'
+
+          target_file = path_gradle if os.path.exists(path_gradle) else path_kts
+
+          if os.path.exists(target_file):
+              with open(target_file, 'r') as f:
+                  content = f.read()
+
+              # تفعيل coreLibraryDesugaring
+              if 'compileOptions' in content and 'coreLibraryDesugaringEnabled' not in content:
+                  content = content.replace('compileOptions {', 'compileOptions {\n        isCoreLibraryDesugaringEnabled = true\n        coreLibraryDesugaringEnabled true')
+
+              if 'dependencies {' in content and 'desugar_jdk_libs' not in content:
+                  content = content.replace('dependencies {', 'dependencies {\n    coreLibraryDesugaring(\"com.android.tools:desugar_jdk_libs:2.0.4\")\n    implementation(\"com.android.tools:desugar_jdk_libs:2.0.4\")')
+
+              with open(target_file, 'w') as f:
+                  f.write(content)
+          "
 
       - name: Get dependencies
         run: flutter pub get
