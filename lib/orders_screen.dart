@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../app_state.dart';
 import '../strings.dart';
-import '../widgets/order_card.dart';
+import 'order_card.dart';
 import 'edit_order_screen.dart';
 import 'settings_screen.dart';
 
