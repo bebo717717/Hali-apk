@@ -5,8 +5,8 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'app_state.dart';
 import 'api.dart';
 import 'strings.dart';
-import 'screens/login_screen.dart';
-import 'screens/orders_screen.dart';
+import 'login_screen.dart';
+import 'orders_screen.dart';
 
 @pragma('vm:entry-point')
 void callbackDispatcher() {
